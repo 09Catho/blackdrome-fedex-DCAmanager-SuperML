@@ -1,0 +1,22 @@
+{
+  "version": "2.0",
+  "model_type": "logistic_regression",
+  "description": "REAL Recovery prediction model - Properly weighted for realistic variance",
+  "bias": 1.5,
+  "weights": {
+    "ageing": -0.025,
+    "log_amount": 0.8,
+    "attempts": 0.4,
+    "staleness": -0.03,
+    "dispute": -2.5,
+    "ptp_active": 3.0
+  },
+  "reason_mappings": {
+    "ageing": "High ageing reduces recovery probability",
+    "log_amount": "Higher amount increases priority",
+    "attempts": "More contact attempts improve recovery",
+    "staleness": "Days since last update reduces priority",
+    "dispute": "Active dispute reduces recovery probability",
+    "ptp_active": "Active payment promise increases recovery"
+  }
+}

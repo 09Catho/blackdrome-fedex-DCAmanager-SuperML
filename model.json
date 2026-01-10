@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "trained_on": "2024-01-10",
+  "n_samples": 5000,
+  "test_accuracy": 0.73,
+  "test_auc": 0.8079556516815947,
+  "bias": -0.5636465993370476,
+  "weights": {
+    "ageing": -2.4202469974801315,
+    "log_amount": 0.13660174435465658,
+    "attempts": 0.23657203600997065,
+    "staleness": -1.427792702906888,
+    "dispute": -1.4407345224675707,
+    "ptp_active": 2.241315721329407
+  },
+  "reason_mappings": {
+    "ageing": [
+      "Low ageing increases recovery",
+      "Medium ageing moderately affects recovery",
+      "High ageing reduces recovery significantly"
+    ],
+    "log_amount": [
+      "Low amount case",
+      "Medium amount case",
+      "High amount increases priority"
+    ],
+    "attempts": [
+      "No recent contact attempts",
+      "Some contact attempts made",
+      "Active engagement with customer"
+    ],
+    "staleness": [
+      "Recently updated case",
+      "Moderate staleness",
+      "Stale case needs immediate attention"
+    ],
+    "dispute": [
+      "No active dispute",
+      "Active dispute reduces recovery",
+      "Active dispute reduces recovery"
+    ],
+    "ptp_active": [
+      "No payment promise",
+      "Active PTP significantly increases recovery",
+      "Active PTP significantly increases recovery"
+    ]
+  }
+}
