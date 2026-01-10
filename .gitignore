@@ -32,3 +32,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Supabase credentials (IMPORTANT!)
+**/supabase/.env
+**/.env.local
+**/.env
+
+# Temporary/debugging files
+MANUAL_USER_CREATION.sql
+GITHUB_DEPLOYMENT.md
+app/api/test-auth/
+app/api/cleanup-users/
+app/api/setup-users/
+app/api/fix-passwords/
+scripts/create_users.js
+
+# IDE
+.vscode/
+.idea/
