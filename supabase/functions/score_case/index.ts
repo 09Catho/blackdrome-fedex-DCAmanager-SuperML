@@ -218,12 +218,15 @@ async function computeActivityStats(supabase: any, caseId: string): Promise<Acti
 }
 
 function computeFeatures(caseData: CaseData, stats: ActivityStats) {
+  // Dispute flag: active if status is DISPUTE OR has dispute activity
+  const hasDispute = caseData.status === 'DISPUTE' || stats.has_dispute;
+  
   return {
-    ageing: Math.min(caseData.ageing_days / 120, 1), // normalized [0,1]
-    log_amount: Math.log(1 + caseData.amount) / 10, // log scaled
-    attempts: Math.min(stats.attempts_count / 10, 1), // normalized [0,1]
-    staleness: Math.min(stats.days_since_last_update / 14, 1), // normalized [0,1]
-    dispute: stats.has_dispute ? 1 : 0,
+    ageing: Math.min(caseData.ageing_days / 120, 1), // normalized [0,1], max 120 days
+    log_amount: Math.log(1 + caseData.amount) / 10, // ln(amount+1)/10 for scale
+    attempts: Math.min(stats.attempts_count / 10, 1), // normalized [0,1], max 10 attempts
+    staleness: Math.min(stats.days_since_last_update / 14, 1), // normalized [0,1], max 14 days
+    dispute: hasDispute ? 1 : 0,
     ptp_active: stats.ptp_active ? 1 : 0,
   };
 }

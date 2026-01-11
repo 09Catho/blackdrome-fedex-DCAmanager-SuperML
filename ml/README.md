@@ -140,6 +140,52 @@ Every prediction includes human-readable reasons:
 - ❌ "Active dispute reduces recovery"
 - ❌ "Stale case needs immediate attention"
 
+## 📐 Feature Schema (Single Source of Truth)
+
+All features are computed identically in training and production:
+
+| Feature | Type | Formula | Range | Description |
+|---------|------|---------|-------|-------------|
+| `ageing` | float | `min(ageing_days / 120, 1.0)` | [0, 1] | Normalized days overdue, capped at 120 days |
+| `log_amount` | float | `ln(amount + 1) / 10` | [0.92, 1.56] | Log-scaled debt amount (₹10k-₹5M range) |
+| `attempts` | float | `min(attempts_30d / 10, 1.0)` | [0, 1] | Contact attempts in last 30 days, capped at 10 |
+| `staleness` | float | `min(days_since_update / 14, 1.0)` | [0, 1] | Days since last activity, capped at 14 days |
+| `dispute` | binary | `1 if status='DISPUTE' OR dispute_activity else 0` | {0, 1} | Active dispute flag |
+| `ptp_active` | binary | `1 if active_payment_promise else 0` | {0, 1} | Payment promise exists |
+
+**Critical Note:** All features use **normalized values (0-1)** except `log_amount` which uses log-scaling for interpretability.
+
+## 📊 Reproducibility
+
+### Training Reproducibility
+- **Random Seed:** `42` (fixed in `train_demo_model.py`)
+- **Dataset:** 5,000 synthetic cases generated programmatically
+- **Validation:** 80/20 train-test split (stratified)
+- **Sanity Checks:** 6 business logic tests (see `business_sanity_tests.py`)
+
+### Reproducing Results
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Train model (generates synthetic data internally)
+python train_demo_model.py
+
+# 3. Run sanity tests
+python business_sanity_tests.py
+
+# 4. Deploy
+cp model.json ../supabase/functions/score_case/
+```
+
+**Expected Metrics:**
+- Test Accuracy: ~83.8%
+- ROC-AUC: ~0.908
+- Brier Score: ~0.12 (calibration)
+
+### Important Disclaimer
+⚠️ **Demo Training:** This model is trained on **synthetic data** generated to match realistic debt collection patterns. For production use, retrain on historical FedEx case outcomes for optimal accuracy
+
 ## 📚 Documentation
 
 | Document | Purpose |

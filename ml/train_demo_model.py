@@ -24,35 +24,45 @@ def generate_synthetic_data(n_samples=5000):
     """
     Generate realistic synthetic debt collection cases for training.
     
+    Features match EXACTLY the production Edge Function calculations:
+    - ageing: normalized (0-1), ageing_days/120, capped at 1
+    - log_amount: ln(amount+1)/10
+    - attempts: normalized (0-1), attempts_count/10, capped at 1  
+    - staleness: normalized (0-1), days_since_update/14, capped at 1
+    - dispute: binary (1 if status=DISPUTE or dispute activity exists)
+    - ptp_active: binary (1 if active payment promise exists)
+    
     Business logic incorporated:
     - Newer cases have higher recovery rates
     - Higher contact attempts correlate with recovery
     - Active PTPs significantly increase recovery probability
     - Disputes reduce recovery chances
     - Stale cases (no recent updates) are harder to recover
-    - Higher amounts have marginally better recovery (more effort)
+    - Higher amounts slightly increase recovery (more effort allocated)
     """
     np.random.seed(42)
     print(f"Generating {n_samples} synthetic debt collection cases...")
     
-    # Generate base features with realistic distributions
-    # Ageing: normalized (0-1), representing 0-365+ days
-    # Distribution: more newer cases, fewer very old cases
-    ageing = np.random.beta(2, 5, n_samples)  # skewed towards newer cases
+    # Generate RAW values first (to match production)
+    # Ageing in days (0-180 days, skewed towards newer)
+    ageing_days_raw = np.random.beta(2, 5, n_samples) * 180
+    ageing = np.minimum(ageing_days_raw / 120, 1.0)  # normalize exactly as in production
     
-    # Log Amount: log-scaled amount (₹10k to ₹5M)
-    # log(10000) ≈ 9.2, log(5000000) ≈ 15.4
-    log_amount = np.random.normal(11.5, 1.5, n_samples)
-    log_amount = np.clip(log_amount, 9, 16)
+    # Amount (₹10k to ₹5M)
+    amount_raw = np.random.lognormal(11.5, 0.8, n_samples)
+    amount_raw = np.clip(amount_raw, 10000, 5000000)
+    log_amount = np.log(1 + amount_raw) / 10  # EXACT formula from production
     
     # Contact attempts in last 30 days (0-15)
     # More attempts for newer cases
-    attempts = np.random.poisson(4 * (1 - ageing**0.5), n_samples)
-    attempts = np.clip(attempts, 0, 15)
+    attempts_raw = np.random.poisson(4 * (1 - ageing**0.5), n_samples)
+    attempts_raw = np.clip(attempts_raw, 0, 15)
+    attempts = np.minimum(attempts_raw / 10, 1.0)  # normalize exactly as in production
     
-    # Staleness: normalized (0-1), days since last update
-    # Correlated with ageing but with noise
-    staleness = np.clip(ageing + np.random.normal(0, 0.2, n_samples), 0, 1)
+    # Days since last update (0-30 days, correlated with ageing)
+    staleness_days_raw = ageing_days_raw * 0.3 + np.random.exponential(5, n_samples)
+    staleness_days_raw = np.clip(staleness_days_raw, 0, 30)
+    staleness = np.minimum(staleness_days_raw / 14, 1.0)  # normalize exactly as in production
     
     # Dispute: binary (20% of cases have disputes)
     # More likely in older cases
@@ -61,7 +71,7 @@ def generate_synthetic_data(n_samples=5000):
     
     # PTP Active: binary (25% have active payment promises)
     # More likely when there are contact attempts and no dispute
-    ptp_prob = 0.15 + 0.1 * (attempts / 10) - 0.2 * dispute
+    ptp_prob = 0.15 + 0.1 * attempts - 0.2 * dispute
     ptp_prob = np.clip(ptp_prob, 0, 0.6)
     ptp_active = np.random.binomial(1, ptp_prob, n_samples)
     
@@ -156,6 +166,16 @@ def train_model():
     
     print(f"\nClassification Report (Test Set):")
     print(classification_report(y_test, y_pred_test, target_names=['Not Recovered', 'Recovered']))
+    
+    # Brier Score (calibration metric)
+    from sklearn.metrics import brier_score_loss
+    brier_train = brier_score_loss(y_train, y_proba_train)
+    brier_test = brier_score_loss(y_test, y_proba_test)
+    
+    print(f"\nBrier Score (Probability Calibration):")
+    print(f"  Training: {brier_train:.4f}  (lower is better, 0 = perfect)")
+    print(f"  Test:     {brier_test:.4f}")
+    print(f"  Note: Measures how well predicted probabilities match actual outcomes")
     
     # Feature importance
     print("="*60)
