@@ -97,8 +97,8 @@ export default function LoginPage() {
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
             Demo Credentials:<br />
-            FedEx Admin: admin@fedex.com / password<br />
-            DCA Agent: agent@dca1.com / password
+            FedEx Admin: admin@fedex.com / 12345678<br />
+            DCA Agent: agent3@dca3.com / 12345678
           </p>
         </div>
       </div>
