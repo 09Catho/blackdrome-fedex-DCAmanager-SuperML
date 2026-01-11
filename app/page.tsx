@@ -180,7 +180,7 @@ export default function Home() {
                 </h2>
                 <p className="text-slate-300 text-lg leading-relaxed mb-6">
                   We didn't use pre-trained models. We built a custom <span className="text-purple-400 font-semibold">Logistic Regression</span> model from scratch, 
-                  trained on real debt collection scenarios with <span className="text-purple-400 font-semibold">500+ cases</span>.
+                  trained on realistic debt collection scenarios with <span className="text-purple-400 font-semibold">5,000 synthetic cases</span>.
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
@@ -215,7 +215,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700/50">
                   <div className="text-sm text-slate-400 mb-2">Training Dataset</div>
-                  <div className="text-2xl font-bold text-white">500+ Cases</div>
+                  <div className="text-2xl font-bold text-white">5,000 Cases</div>
                 </div>
                 <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700/50">
                   <div className="text-sm text-slate-400 mb-2">Model Type</div>
