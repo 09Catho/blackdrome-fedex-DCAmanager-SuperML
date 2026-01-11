@@ -9,7 +9,7 @@
 Built by **Team Blackdrome** for FedEx Hackathon 2026
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/09Catho/blackdrome-fedex-DCAmanager-SuperML)
-[![Live Demo](https://img.shields.io/badge/Live-Demo-orange?style=for-the-badge&logo=vercel)](https://your-app.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-orange?style=for-the-badge&logo=vercel)]([https://your-app.vercel.app](https://blackdrome-fedex-dc-amanager-super.vercel.app/))
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase)](https://supabase.com)
 
