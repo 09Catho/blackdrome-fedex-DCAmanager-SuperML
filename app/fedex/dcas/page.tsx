@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabaseClient';
 import { Building2, Users, TrendingUp, TrendingDown, Award, AlertCircle } from 'lucide-react';
 
 interface DCA {

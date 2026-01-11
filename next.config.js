@@ -17,10 +17,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Exclude from file watching
-  watchOptions: {
-    ignored: ['**/supabase/functions/**'],
-  },
 };
 
 module.exports = nextConfig;
