@@ -240,7 +240,7 @@ python train_demo_model.py
 
 ## 🔗 **Links**
 
-- **🌐 Live Demo**: [your-app.vercel.app](https://your-app.vercel.app)
+- **🌐 Live Demo**: [your-app.vercel.app]([https://your-app.vercel.app](https://blackdrome-fedex-dc-amanager-super.vercel.app/))
 - **📚 Documentation**: [FEATURES.md](FEATURES.md)
 - **🚀 Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
 - **🤖 ML Documentation**: [ml/README.md](ml/README.md)
