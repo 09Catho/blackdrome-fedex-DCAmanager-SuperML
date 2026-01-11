@@ -170,11 +170,11 @@ FOR ALL USING (current_user_role() = 'fedex_admin');
 ```bash
 # FedEx Admin (sees all cases)
 Email: admin@fedex.com
-Password: password123
+Password: 12345678
 
 # DCA Agent (sees only assigned cases)  
-Email: agent@dca1.com
-Password: password123
+Email: agent3@dca3.com
+Password: 12345678
 ```
 
 ### **Local Development**
